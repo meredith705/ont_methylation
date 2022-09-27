@@ -23,7 +23,6 @@ workflow run_methylTag_minimap2 {
         ref_file            = REF_FILE,
         in_container        = CONTAINER,
         in_args             = MINIMAP2_ARGS,
-        in_out_label        = OUT_LABEL,
         in_cores            = CORES,
         in_disk             = DISK,
         in_mem              = MEM

@@ -13,7 +13,7 @@ workflow unalignedBam_to_phasedMethylBed {
     input {
         String inSampleName                           # sample name
         String inRefName                              # name of reference
-        File unalgnedBam                            # unaligned Bam from Guppy.6.1.2
+        File unalignedBam                            # unaligned Bam from Guppy.6.1.2
         File refAssembly
         String dockerImage = "meredith705/methylation:latest" 
     }
@@ -22,29 +22,28 @@ workflow unalignedBam_to_phasedMethylBed {
     # Align bam to reference
     call minimap2_t.fastqAlignAndSortBam{
         input:
-            unaligned_methyl_bam = ~{unalignedBam}
-            ref_file             = ~{refAssembly}
-            ref_name             = ~{inRefName}
-            sample               = ~{inSampleName}
+            unaligned_methyl_bam = unalignedBam,
+            ref_file             = refAssembly,
+            ref_name             = inRefName,
+            sample               = inSampleName
         }    
-    }
 
     # run PMDV to haplotag aligned reads
     call pmdv_t.pepperMarginDeepVariantHaplotag{
         input:
-            inputReads = fastqAlignAndSortBam.out_bam
-            inputReadIdx = fastqAlignAndSortBam.out_bam_idx
-            assembly   = ~{refAssembly}
-            sample     = ~{inSampleName}
-            ref        = ~{inRefName}
+            inputRead = fastqAlignAndSortBam.out_bam,
+            inputReadIdx = fastqAlignAndSortBam.out_bam_idx,
+            assembly   = refAssembly,
+            sample     = inSampleName,
+            ref        = inRefName
     }
 
     # Haplotype bedMethyl
     call modbam2bed{
         input:
-            haplotaggedBam = pepperMarginDeepVariantHaplotag.haplotaggedBam
-            ref = ~{refAssembly}
-            sample = ~{inSampleName}
+            haplotaggedBam = pepperMarginDeepVariantHaplotag.haplotaggedBam,
+            ref = refAssembly,
+            sample = inSampleName
     }
 
 
