@@ -1,13 +1,48 @@
 version 1.0
 
+workflow runpepperMarginDeepVariantHaplotag{
+    input {
+        File inputRead_in
+        File inputReadIdx_in
+        File assembly_in
+        File? assemblyIdx_in
+        String sample_in
+        String ref_in
+
+        String readTypeFlag = "ont_r9_guppy5_sup"
+        String? extraArgs_in
+
+        String dockerImage = "kishwars/pepper_deepvariant:r0.8" # r0.8
+    
+    }
+
+    call pepperMarginDeepVariantHaplotag as pmdvh{
+        input:
+            inputRead = inputRead_in,
+            inputReadIdx = inputReadIdx_in,
+            assembly   = assembly_in,
+            assemblyIdx = assemblyIdx_in,
+            sample     = sample_in,
+            ref        = ref_in,
+            extraArgs = extraArgs_in
+    }
+
+    output {
+        File haplotaggedBam_out = pmdvh.haplotaggedBam
+        File vcfOut_out         = pmdvh.vcfOut
+        File vcfIdx_out      = pmdvh.vcfIdxOut
+    }
+
+}
+
 task pepperMarginDeepVariantHaplotag {
     input {
         File inputRead
         File inputReadIdx
         File assembly
+        File? assemblyIdx
         String sample
         String ref
-
 
         String readTypeFlag = "ont_r9_guppy5_sup"
         String? extraArgs
@@ -15,7 +50,7 @@ task pepperMarginDeepVariantHaplotag {
         Int memSizeGB = 128
         Int threadCount = 64
         Int diskSizeGB = 4 * round(size(inputRead, 'G')) + round(size(assembly, 'G')) + 100
-        String dockerImage = "kishwars/pepper_deepvariant@sha256:70908591ad67e8567a6e4551119b2cfc33d957ad39701c8af51b36b516214645" # r0.8
+        String dockerImage = "kishwars/pepper_deepvariant:r0.8" # r0.8
     
     }
 
@@ -35,13 +70,26 @@ task pepperMarginDeepVariantHaplotag {
         set -eux -o pipefail
         set -o xtrace
 
+        echo starting pmdvh
         ## Soft link fasta and index so they are in the same directory
         REF=$(basename ~{assembly})
-        samtools faidx ~{assembly}
-        REF_IDX=$(~{assembly}.fai) 
+
+        echo $REF
+        if (defined(assemblyIdx)){
+            REF_IDX=$(basename ~{assemblyIdx}) 
+            ln -s ~{assemblyIdx} ./$REF_IDX
+        }
+
+        if (!defined(assemblyIdx)){
+            samtools faidx ~{assembly}
+            REF_IDX=$(basename ~{assembly}.fai) 
+            ln -s ~{assembly}.fai ./$REF_IDX
+        }        
+
+        echo asm index done
+        echo $REF_IDX
 
         ln -s ~{assembly} ./$REF
-
         
         ## Soft link fasta and index so they are in the same directory
         READS=$(basename ~{inputRead})
@@ -71,6 +119,7 @@ task pepperMarginDeepVariantHaplotag {
             --phased_output \
             --only_haplotag \
             ${EXTRA_ARGS}
+            
 
     >>>
 
