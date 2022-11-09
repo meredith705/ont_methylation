@@ -1,0 +1,31 @@
+version: 1.2
+workflows:
+  - name: methylationONT
+    subclass: WDL
+    primaryDescriptorPath: /workflows/methylation_ont.wdl
+    authors:
+      - name: Melissa Meredith
+        email: mmmeredi@ucsc.edu
+        orcid: 0000-0001-5736-3193
+  - name: methylTaggedReadsMinimap2
+    subclass: WDL
+    primaryDescriptorPath: /tasks/methyltagMinimap2.wdl
+    authors:
+      - name: Melissa Meredith
+        email: mmmeredi@ucsc.edu
+        orcid: 0000-0001-5736-3193
+  - name: PMDVhaplotag
+    subclass: WDL
+    primaryDescriptorPath: /tasks/PMDV_haplotag.wdl
+    authors:
+      - name: Melissa Meredith
+        email: mmmeredi@ucsc.edu
+        orcid: 0000-0001-5736-3193
+  - name: modbam2bedPhased
+    subclass: WDL
+    primaryDescriptorPath: /tasks/modbam2bed.wdl
+    authors:
+      - name: Melissa Meredith
+        email: mmmeredi@ucsc.edu
+        orcid: 0000-0001-5736-3193
+        
