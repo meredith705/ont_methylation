@@ -3,6 +3,7 @@ version 1.0
 task modbam2bed {
     input {
         File haplotaggedBam
+        File haplotaggedBamBai
         File ref
         String sample_name
         String ref_name
@@ -40,13 +41,13 @@ task modbam2bed {
         for HP in 1 2; do
             modbam2bed \
                 -e -m ~{modType} --~{out_type_filter} -t ~{threadCount} --haplotype ${HP} ${EXTRA_ARGS} \
-                ~{ref} ~{haplotaggedBam} | bzip -c - > ~{sample_name}.~{haplotaggedBam}.hp${HP}.cpg.bed.gz
+                ~{ref} ~{haplotaggedBam} | bgzip -c > ~{sample_name}.haplotagged.bam.hp${HP}.cpg.bed.gz
         done;
     >>>
 
         output {
-        File hap1bedOut      = "~{sample_name}.~{haplotaggedBam}.hp1.cpg.bed.gz"
-        File hap2bedOut      = "~{sample_name}.~{haplotaggedBam}.hp2.cpg.bed.gz"
+        File hap1bedOut      = "~{sample_name}.haplotagged.bam.hp1.cpg.bed.gz"
+        File hap2bedOut      = "~{sample_name}.haplotagged.bam.hp2.cpg.bed.gz"
     }
 
     runtime {

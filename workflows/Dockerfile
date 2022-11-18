@@ -7,9 +7,10 @@ RUN mkdir -p /home/apps
 RUN cd /home/apps && \
     apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get install -y vim git wget make build-essential cmake \
-    python3.8 python3.8-dev python3-pip \
+    tabix python3.8 python3.8-dev python3-pip \
     protobuf-compiler pkg-config libprotobuf-dev libjansson-dev libhts-dev libncurses-dev \
-    libbz2-dev liblzma-dev zlib1g-dev autoconf libcurl4-openssl-dev curl libomp-dev
+    libbz2-dev liblzma-dev zlib1g-dev autoconf libcurl4-openssl-dev curl libomp-dev libssl-dev  && \
+    pip3 install modbamtools 
 
 WORKDIR /home/apps
 RUN wget https://github.com/samtools/samtools/releases/download/1.15.1/samtools-1.15.1.tar.bz2 && \
@@ -36,7 +37,8 @@ RUN wget https://github.com/attractivechaos/k8/releases/download/0.2.5/k8-0.2.5.
 
 WORKDIR /home/apps
 RUN git clone --recursive https://github.com/epi2me-labs/modbam2bed.git && \
-    make modbam2bed 
+    cd modbam2bed && \
+    make 
 
 
 ENV PATH="/home/apps/samtools-1.15.1:${PATH}"
