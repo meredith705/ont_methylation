@@ -55,8 +55,8 @@ workflow unalignedBam_to_phasedMethylBed {
     output {
         File hap1bed = modbam2bed.hap1bedOut
         File hap2bed = modbam2bed.hap2bedOut
-        File haplotaggedBam = "pmdvHap.haplotaggedBam_out"
-        File haplotaggedBamBai = "pmdvHap.haplotaggedBamBai_out"
+        File haplotaggedBam = pmdvHap.haplotaggedBam_out
+        File haplotaggedBamBai = pmdvHap.haplotaggedBamBai_out
     }
 
 }
