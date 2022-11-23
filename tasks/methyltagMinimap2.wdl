@@ -15,7 +15,7 @@ workflow run_methylTag_minimap2 {
         String MINIMAP2_ARGS="-y -x map-ont -a --eqx -k 17 -K 10g"
         String OUT_LABEL=""
         Int CORES = 20
-        Int DISK = 4 * round(size(REF_FILE, 'G')) + 10 * round(size(UNALIGNED_METHYL_BAM, 'G')) + 100
+        Int DISK = 4 * round(size(REF_FILE, 'G')) + 10 * round(size(UNALIGNED_METHYL_BAM, 'G')) + 1000
         Int MEM = 50
     }
 
