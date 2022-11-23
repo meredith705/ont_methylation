@@ -15,7 +15,7 @@ workflow run_methylTag_minimap2 {
         String MINIMAP2_ARGS="-y -x map-ont -a --eqx -k 17 -K 10g"
         String OUT_LABEL=""
         Int CORES = 20
-        Int DISK = 10 * round(size(REF_FILE, 'G')) + 10 * round(size(UNALIGNED_METHYL_BAM, 'G')) + 100
+        Int DISK = 4 * round(size(REF_FILE, 'G')) + 4 * round(size(UNALIGNED_METHYL_BAM, 'G')) + 100
         Int MEM = 50
     }
 
@@ -47,7 +47,7 @@ task fastqAlignAndSortBam {
         String in_container = "meredith705/ont_methyl:latest"
         String in_args      = "-y -x map-ont -a --eqx -k 17 -K 10g"
         Int in_cores        = 20
-        Int in_disk = 10 * round(size(REF_FILE, 'G')) + 10 * round(size(UNALIGNED_METHYL_BAM, 'G')) + 100
+        Int in_disk = 4 * round(size(ref_file, 'G')) + 4 * round(size(unaligned_methyl_bam, 'G')) + 100
         Int in_mem          = 50
     }
     command <<<
