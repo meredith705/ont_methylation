@@ -16,7 +16,7 @@ workflow run_methylTag_minimap2 {
         String OUT_LABEL=""
         Int CORES = 64
         Int DISK = (4 * round(size(REF_FILE, 'G'))) + (10 * round(size(UNALIGNED_METHYL_BAM, 'G'))) + 1000
-        Int MEM = 100
+        Int MEM = 300
     }
 
     call fastqAlignAndSortBam {
@@ -48,7 +48,7 @@ task fastqAlignAndSortBam {
         String in_args      = "-y -x map-ont -a --eqx -k 17 -K 10g"
         Int in_cores        = 64
         Int in_disk = 4 * round(size(ref_file, 'G')) + 10 * round(size(unaligned_methyl_bam, 'G')) + 100
-        Int in_mem          = 100
+        Int in_mem          = 300
     }
     command <<<
     set -eux -o pipefail
